@@ -1,0 +1,7 @@
+body{
+    text-align: center;
+}
+#bookcase{
+    display:flex;
+    justify-content: center;
+}
