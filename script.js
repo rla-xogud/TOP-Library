@@ -1,4 +1,4 @@
-let myLibrary = [{title:"asdfaasdfasdfasdfasdfasdfasdfasdfasdfasdf asdf asdfasfdasdfasdfsd", author:"qweqweq", pages:"qweqwe" ,read:true}];
+//let myLibrary = [{title:"asdfaasdfasdfasdfasdfasdfasdfasdfasdfasdf asdf asdfasfdasdfasdfsd", author:"qweqweq", pages:"qweqwe" ,read:true}];
 let bookMap = new Map();
 
 const Book ={
@@ -27,24 +27,22 @@ const BOOKCASE = document.querySelector("#bookcase");
 function addBookToLibrary(){
     let title = prompt("title");
     let author = prompt("author");
-    if(bookMap.get(title) == author){
+    let titleauthor = (title+author).toLowerCase
+    if(bookMap.get(titleauthor) != null){
         alert("Book is already in library")
         return;
-    }else{
-        bookMap.set(title, author);
     }
     let pages = prompt("pages");
     let read = prompt('read')
     let newBook = Object.create(Book);
     newBook.init(title,author,pages,read);
-    myLibrary.push(newBook);
+    bookMap.set(titleauthor, newBook);
     displayLibrary();
 }
 
 function displayLibrary(){
-    BOOKCASE.innerHTML = "";
-    for(let i = 0; i < myLibrary.length; i++){
-        BOOKCASE.appendChild(makeBook(myLibrary[i]));
+    for(let book of bookMap){
+        BOOKCASE.appendChild(makeBook(book[1]));
     }
 }
 
@@ -57,22 +55,17 @@ function makeBook(book){
         }
         let bookInfo = document.createElement('div');
         bookInfo.className = component;
-        if(component == "author"){
-            bookInfo.innerHTML = "By: " + book[component];
-        }else{
-            bookInfo.innerHTML = book[component];
-        }
+        bookInfo.innerHTML = book[component];
         newBook.appendChild(bookInfo);
     }
     
     let hex = genHex();
-    console.log(hex.length)
     newBook.style.backgroundColor = hex;
     newBook.style.color = invertColor(hex, true);
     let removeBtn = document.createElement("button")
     removeBtn.className = "removeButton";
-    removeBtn.innerHTML = "X"
-    newBook.appendChild(removeBtn);//.innerHTML = book.title);
+    removeBtn.innerHTML = "x"
+    newBook.appendChild(removeBtn);
     newBook.addEventListener('mouseover', () => {showAdditionalDetails(newBook)});
     newBook.addEventListener('mouseout', () => {hideAdditionalDetails(newBook)});
     removeBtn.addEventListener('click', ()=>{removeBook(newBook)});
@@ -80,20 +73,17 @@ function makeBook(book){
 }
 
 function removeBook(book){
-    alert("weewoo");
     book.parentNode.removeChild(book);
-    
+    let titleauthor = book.querySelector(".title").innerHTML + book.querySelector(".author").innerHTML;
+    bookMap.delete(titleauthor.toLowerCase());
 }
 
 //Generates 6 digit hex number to randomize color of books
-function genHex(){
+function genHex(size = 6){
     let hex = String(Math.floor(Math.random()*16777215).toString(16));
-    if (hex.length < 6) {
-        hex = hex.split("");
-        while(hex.length < 6){
-            hex.unshift('0');
-        }
-        hex = hex.join("")
+    if (hex.length < size) {
+        hex = "000000" + hex;
+        hex = hex.substr(hex.length - size)
     }
     return "#" + hex;
 }
@@ -174,8 +164,9 @@ function hideAdditionalDetails(book){
 function fillShelves(){
     for(let i = 0; i < 90; i++){
         let book = Object.create(Book);
-        book.init(i,i,i,i);
-        myLibrary.push(book);
+        book.init("a"+i,i+"b",i,i);
+        //myLibrary.push(book);
+        bookMap.set("a"+i + i +"b", book)
     }
 }
 fillShelves();
