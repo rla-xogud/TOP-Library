@@ -27,7 +27,7 @@ const BOOKCASE = document.querySelector("#bookcase");
 function addBookToLibrary(){
     let title = prompt("title");
     let author = prompt("author");
-    let titleauthor = (title+author).toLowerCase
+    let titleauthor = (title+author).toLowerCase();
     if(bookMap.get(titleauthor) != null){
         alert("Book is already in library")
         return;
@@ -41,6 +41,7 @@ function addBookToLibrary(){
 }
 
 function displayLibrary(){
+    BOOKCASE.innerHTML = ""
     for(let book of bookMap){
         BOOKCASE.appendChild(makeBook(book[1]));
     }

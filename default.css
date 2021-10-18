@@ -9,17 +9,20 @@ h1{
 }
 #bookcase{
     display:flex;
-    justify-content: left;
+    justify-content: center;
+    align-items: flex-start;
     border: solid black;
+    border-radius: 20px;
     width: 80%;
     min-height: 600px;
     margin: 0 auto;
-    flex-wrap: wrap;
-    padding:20px;
+    flex-wrap: wrap-reverse;
+    padding:20px 0;
+    gap:20px;
 }
 .book{
     border: solid black;
-    width:fit-content;
+    height:fit-content;
     min-height: 100px;
     max-height: 250px;
     writing-mode: vertical-rl;
