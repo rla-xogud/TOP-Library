@@ -1,7 +1,43 @@
 body{
     text-align: center;
+    background-color: #5e332b;
+    color: white;
+    height:90%;
+}
+h1{
+    font-size: 60px;
 }
 #bookcase{
     display:flex;
-    justify-content: center;
+    justify-content: left;
+    border: solid black;
+    width: 80%;
+    min-height: 600px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    padding:20px;
+}
+.book{
+    border: solid black;
+    width:fit-content;
+    min-height: 100px;
+    max-height: 250px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    word-wrap: inherit;
+    text-align:left;
+    border-radius: 10px;
+    padding:10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+.title{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+
+.pages, .read{
+    display: none;
 }
