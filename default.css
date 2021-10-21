@@ -21,6 +21,8 @@ h1{
     gap:20px;
 }
 .book{
+    display:flex;
+    flex-direction: column;
     border: solid black;
     height:fit-content;
     min-height: 100px;
@@ -41,6 +43,14 @@ h1{
     text-overflow: ellipsis;
 }
 
-.pages, .read{
+.pages, .read, .open{
     display: none;
+}
+
+.removeButton{
+    display: none;
+    color:black;
+    background: white;
+    border-radius: 3px;
+    height:fit-content;
 }

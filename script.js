@@ -1,5 +1,5 @@
-//let myLibrary = [{title:"asdfaasdfasdfasdfasdfasdfasdfasdfasdfasdf asdf asdfasfdasdfasdfsd", author:"qweqweq", pages:"qweqwe" ,read:true}];
 let bookMap = new Map();
+let BOOKOPEN = false;
 
 const Book ={
      init: function(title, author, pages, read){
@@ -7,6 +7,7 @@ const Book ={
         this.author = author;
         this.pages = pages;
         this.read = read;
+        this.open = false;
     },
     info: function(){
         let string = this.title +" by " + this.author + ", " + this.pages + " pages, ";
@@ -67,10 +68,24 @@ function makeBook(book){
     removeBtn.className = "removeButton";
     removeBtn.innerHTML = "x"
     newBook.appendChild(removeBtn);
-    newBook.addEventListener('mouseover', () => {showAdditionalDetails(newBook)});
-    newBook.addEventListener('mouseout', () => {hideAdditionalDetails(newBook)});
+    
+    
+    newBook.addEventListener('click', () => {toggle(newBook)});
+    newBook.click();
+//    newBook.addEventListener('click', () => {showAdditionalDetails(newBook)});
+    //newBook.addEventListener('mouseout', () => {hideAdditionalDetails(newBook)});
     removeBtn.addEventListener('click', ()=>{removeBook(newBook)});
     return newBook;
+}
+
+function toggle(book){
+    if(book.open == false){
+        showAdditionalDetails(book);
+        book.open = true;
+    }else{
+        hideAdditionalDetails(book);
+        book.open = false;
+    }
 }
 
 function removeBook(book){
@@ -136,13 +151,16 @@ function padZero(str, len) {
 *
 */
 function showAdditionalDetails(book){ 
-    let children = book.children;
+    
+//    let children = book.children;
 
-    for(let child of children){
-        if(child.className == "pages" || child.className == "read"){
+    for(let child of book.children){
+        if(child.className == "pages" || child.className == "read"|| 
+        child.className == "removeButton"){
             child.style.display = "flex"
-            child.style["justify-content"] = "center"
+            //child.style["justify-content"] = "center"  
         }
+        child.style["writing-mode"] = "horizontal-tb"
     }
 }
 
@@ -155,9 +173,11 @@ function hideAdditionalDetails(book){
     let children = book.children;
 
     for(let child of children){
-        if(child.className == "pages" || child.className == "read"){
+        if(child.className == "pages" || child.className == "read" || 
+            child.className == "removeButton"){
             child.style.display = "none"
         }
+        child.style["writing-mode"] = "vertical-rl";
     }
 }
 
