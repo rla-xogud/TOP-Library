@@ -42,7 +42,17 @@ function addBookToLibrary(){
     addBookModal.style.display = "block";
     document.body.style.overflow = "hidden";
 
-
+    for(let child of addBookModal.childNodes){
+        if(child.id == "addBook"){
+            for(let info of child.childNodes){
+                //add onclick for x button
+                if(info.className == "addModalClose"){
+                    info.addEventListener('click', () => closeModal(addBookModal))
+                    break;
+                }
+            }
+        }
+    }
     // let close = document.getElementsByClassName("addModalClose")[0];
     // close.onclick = function(){
     //     addBookModal.style.display = "none";
@@ -64,11 +74,25 @@ function addBookToLibrary(){
     // displayLibrary();
 }
 function submitBook(){
-    let title = document.getElementById("titleInput").value;
-    let author = document.getElementById("authorInput").value;
+    //trim to remove leading and trailing spaces and replace multiple spaces with single
+    let title = document.getElementById("titleInput").replace(/\s+/g,' ').value.trim();
+    if(title.length == 0){
+        alert("Title can't be empty");
+        return
+    }
+    let author = document.getElementById("authorInput").replace(/\s+/g,' ').value.trim();
+    if(author.length == 0){
+        alert("Author can't be empty");
+        return
+    }
     let pages = document.getElementById("pagesInput").value;
+    if(pages.length == 0){
+        alert("Enter number of pages");
+        return
+    }
     let read = document.getElementById("readInput").value;
 
+    //title+author because you can have same title different author
     let titleauthor = (title + author).toLowerCase();
     
     if(bookMap.get(titleauthor) != null){
@@ -160,7 +184,7 @@ function genHex(size = 6){
     }
     return "#" + hex;
 }
-/* input: hex color, string "bw"
+/* input: hex color, boolean bw
  * return: black or white color based on intensity of RGB color based
  * on stackoverflow linked in if(bw) section
  * 
