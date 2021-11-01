@@ -1,5 +1,5 @@
 let bookMap = new Map();
-let BOOKOPEN = false;
+// let BOOKOPEN = false;
 
 const Book ={
      init: function(title, author, pages, read){
@@ -7,7 +7,7 @@ const Book ={
         this.author = author;
         this.pages = pages;
         this.read = read;
-        this.open = false;
+        // this.open = false;
     },
     info: function(){
         let string = this.title +" by " + this.author + ", " + this.pages + " pages, ";
@@ -19,26 +19,73 @@ const Book ={
         return string;
     }
 }
+//popup for book info
+const modal = document.getElementById("bookModal");
+const addBookModal = document.getElementById("addBookModal");
 
+//closes modal if clicking outside it when it's open
+window.onclick = function(event) {
+    if (event.target == modal || event.target == addBookModal) {
+        closeModal(event.target);
+    }
+    document.body.style.overflow = "visible";
+}
+
+function closeModal(close){
+    close.style.display = "none";
+}
 const addBook = document.querySelector("#addBookBtn");
 addBook.addEventListener("click", ()=>{addBookToLibrary()});
-
 const BOOKCASE = document.querySelector("#bookcase");
 
 function addBookToLibrary(){
-    let title = prompt("title");
-    let author = prompt("author");
-    let titleauthor = (title+author).toLowerCase();
+    addBookModal.style.display = "block";
+    document.body.style.overflow = "hidden";
+
+
+    // let close = document.getElementsByClassName("addModalClose")[0];
+    // close.onclick = function(){
+    //     addBookModal.style.display = "none";
+    //     return;
+    // }
+    // let title = prompt("title");
+    // let author = prompt("author");
+    // //Use title + author to duplicate check because there can be books with same title by different authors
+    // let titleauthor = (title+author).toLowerCase();
+    // if(bookMap.get(titleauthor) != null){
+    //     alert("Book is already in library")
+    //     return;
+    // }
+    // let pages = prompt("pages");
+    // let read = prompt('read')
+    // let newBook = Object.create(Book);
+    // newBook.init(title,author,pages,read);
+    // bookMap.set(titleauthor, newBook);
+    // displayLibrary();
+}
+function submitBook(){
+    let title = document.getElementById("titleInput").value;
+    let author = document.getElementById("authorInput").value;
+    let pages = document.getElementById("pagesInput").value;
+    let read = document.getElementById("readInput").value;
+
+    let titleauthor = (title + author).toLowerCase();
+    
     if(bookMap.get(titleauthor) != null){
         alert("Book is already in library")
         return;
     }
-    let pages = prompt("pages");
-    let read = prompt('read')
+
     let newBook = Object.create(Book);
-    newBook.init(title,author,pages,read);
-    bookMap.set(titleauthor, newBook);
-    displayLibrary();
+    newBook.init(title, author, pages, read);
+    bookMap.set(titleauthor,newBook);
+
+    BOOKCASE.appendChild(makeBook(newBook));
+    document.getElementById("addBookForm").reset();
+    
+    closeModal(addBookModal);
+    //displayLibrary();
+    //alert("hello" + title  +author+ pages+ read)
 }
 
 function displayLibrary(){
@@ -68,26 +115,36 @@ function makeBook(book){
     removeBtn.className = "removeButton";
     removeBtn.innerHTML = "x"
     newBook.appendChild(removeBtn);
-    
-    
-    newBook.addEventListener('click', () => {toggle(newBook)});
-    newBook.click();
-//    newBook.addEventListener('click', () => {showAdditionalDetails(newBook)});
-    //newBook.addEventListener('mouseout', () => {hideAdditionalDetails(newBook)});
     removeBtn.addEventListener('click', ()=>{removeBook(newBook)});
+    newBook.addEventListener('click', () => {openModal(newBook)});
     return newBook;
 }
 
-function toggle(book){
-    if(book.open == false){
-        showAdditionalDetails(book);
-        book.open = true;
-    }else{
-        hideAdditionalDetails(book);
-        book.open = false;
+//Opens pop-up modal to display more information about book that was selected
+function openModal(book){
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden";
+    
+    //matches id of modal elements with classname of book elements and changes what's shown on modal
+    for(let child of modal.childNodes){
+        if(child.id == "bookContent"){
+            for(let info of child.childNodes){
+                //add onclick for x button
+                if(info.className == "modalClose"){
+                    info.addEventListener('click', () => closeModal(modal))
+                    continue;
+                }
+                for(let bookInfo of book.childNodes){
+                    if(info.id == bookInfo.className){
+                        info.innerHTML = bookInfo.innerHTML;
+                    }
+                }
+            }
+        }
     }
 }
 
+//Remove book from data structure and display
 function removeBook(book){
     book.parentNode.removeChild(book);
     let titleauthor = book.querySelector(".title").innerHTML + book.querySelector(".author").innerHTML;
@@ -145,41 +202,41 @@ function padZero(str, len) {
 }
 
 
-/* Displays additional information about a book on hover 
-*  (pages and if book has been read or not)
-*  input: book
-*
-*/
-function showAdditionalDetails(book){ 
+// /* Displays additional information about a book on hover 
+// *  (pages and if book has been read or not)
+// *  input: book
+// *
+// */
+// function showAdditionalDetails(book){ 
     
-//    let children = book.children;
+// //    let children = book.children;
 
-    for(let child of book.children){
-        if(child.className == "pages" || child.className == "read"|| 
-        child.className == "removeButton"){
-            child.style.display = "flex"
-            //child.style["justify-content"] = "center"  
-        }
-        child.style["writing-mode"] = "horizontal-tb"
-    }
-}
+//     for(let child of book.children){
+//         if(child.className == "pages" || child.className == "read"|| 
+//         child.className == "removeButton"){
+//             child.style.display = "flex"
+//             //child.style["justify-content"] = "center"  
+//         }
+//         child.style["writing-mode"] = "horizontal-tb"
+//     }
+// }
 
-/* Hides additional information about a book when not hovering over it 
-*  (pages and if book has been read or not)
-*  input: book
-*
-*/
-function hideAdditionalDetails(book){ 
-    let children = book.children;
+// /* Hides additional information about a book when not hovering over it 
+// *  (pages and if book has been read or not)
+// *  input: book
+// *
+// */
+// function hideAdditionalDetails(book){ 
+//     let children = book.children;
 
-    for(let child of children){
-        if(child.className == "pages" || child.className == "read" || 
-            child.className == "removeButton"){
-            child.style.display = "none"
-        }
-        child.style["writing-mode"] = "vertical-rl";
-    }
-}
+//     for(let child of children){
+//         if(child.className == "pages" || child.className == "read" || 
+//             child.className == "removeButton"){
+//             child.style.display = "none"
+//         }
+//         child.style["writing-mode"] = "vertical-rl";
+//     }
+// }
 
 //Function only used to test bookcase
 function fillShelves(){
