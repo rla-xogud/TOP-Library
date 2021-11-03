@@ -15,14 +15,15 @@
     <div id = "bookModal">
         <div id = "bookContent"> 
             <button class = "modalClose">x</button>
-            <div id = "title">Title</div>
-            <div id = "author">Author</div>
-            <div id = "pages">Pages</div>
-            <div id = "read">Have read</div>
-            <!-- checkbox? -->
+            <div id = "bookInfo"></div>
+            <div id = "checkBoxDiv">
+                <input type = "checkbox" id = "haveRead"></input>
+                <label for = "checkbox" id = "haveReadLabel">Have read?</label>
+            </div>
+            <button class = "removeBook">Remove book from library</button>
         </div>
     </div>
-    <!-- Maybe add a form here and on submit makes a book? Also using modal -->
+    
     <div id = "addBookModal">
         <div id = "addBook">
             <button class = "addModalClose">x</button>
@@ -36,7 +37,6 @@
                 <label for = "readInput">Have read</label>
                 <input type = "checkbox" id = "readInput"></input>
                 <input type = "button" onclick = "submitBook();" value = "Submit" id = "submitButton"></input>
-                <!-- checkbox? -->
             </form> 
         </div>
     </div>
